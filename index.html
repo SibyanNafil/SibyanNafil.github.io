@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Sibyan Nafil Ilmi | Portfolio</title>
+<meta name="description" content="Portfolio Muhammad Sibyan Nafil Ilmi, insinyur mekatronika yang berfokus pada sistem embedded, desain PCB, dan otomasi industri.">
+<meta property="og:title" content="Muhammad Sibyan Nafil Ilmi | Portfolio">
+<meta property="og:description" content="Insinyur mekatronika yang membangun sistem embedded dan otomasi industri, dari desain PCB sampai logika kendali PLC.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF0EC;
+    --paper-alt:#E3E6DF;
+    --panel:#FFFFFF;
+    --ink:#172431;
+    --blueprint:#2F5C7A;
+    --blueprint-deep:#1B3A4B;
+    --amber:#C2790C;
+    --amber-deep:#9C6009;
+    --steel:#55606B;
+    --line:rgba(23,36,49,0.16);
+    --font-sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --font-mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:var(--font-sans);line-height:1.2;margin:0 0 0.75rem;}
+  p{margin:0 0 1rem;max-width:62ch;}
+  a{color:var(--blueprint);}
+  ul{margin:0;}
+  img{max-width:100%;display:block;}
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+  }
+
+  .container{max-width:1100px;margin:0 auto;padding:0 1.5rem;}
+  .section{padding:5rem 0;}
+  .section-alt{background:var(--paper-alt);}
+  .section-title{font-size:1.75rem;font-weight:600;margin-bottom:2rem;}
+
+  /* Header */
+  .site-header{
+    position:sticky;top:0;z-index:10;
+    background:var(--panel);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1100px;margin:0 auto;padding:1rem 1.5rem;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;
+  }
+  .nav-name{font-weight:600;color:var(--ink);text-decoration:none;font-size:1rem;}
+  .nav-links{display:flex;gap:1.25rem;list-style:none;padding:0;margin:0;flex-wrap:wrap;}
+  .nav-links a{color:var(--steel);text-decoration:none;font-size:0.88rem;font-weight:500;position:relative;padding-bottom:2px;}
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:-2px;width:100%;height:1px;
+    background:var(--blueprint);transform:scaleX(0);transform-origin:left;
+    transition:transform .2s ease;
+  }
+  .nav-links a:hover{color:var(--blueprint);}
+  .nav-links a:hover::after{transform:scaleX(1);}
+
+  /* Hero */
+  .hero{
+    position:relative;
+    max-width:1100px;margin:0 auto;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:3rem;align-items:center;
+    padding:5rem 1.5rem 4.5rem;
+    background-image:radial-gradient(var(--line) 1px, transparent 1px);
+    background-size:22px 22px;
+    background-position:-6px -6px;
+  }
+  .hero::before{
+    content:"";position:absolute;top:1.5rem;left:1.5rem;width:22px;height:22px;
+    border-top:2px solid var(--blueprint);border-left:2px solid var(--blueprint);
+  }
+  .hero::after{
+    content:"";position:absolute;bottom:1.5rem;right:1.5rem;width:22px;height:22px;
+    border-bottom:2px solid var(--blueprint);border-right:2px solid var(--blueprint);
+  }
+  .hero h1{font-size:2.75rem;font-weight:700;letter-spacing:-0.01em;}
+  .hero .role{font-size:1.15rem;color:var(--ink);max-width:48ch;}
+  .hero .meta{font-size:0.9rem;color:var(--steel);font-family:var(--font-mono);}
+  .hero-actions{display:flex;gap:1rem;margin-top:1.75rem;flex-wrap:wrap;}
+  .hero-photo-placeholder{aspect-ratio:4/5;min-height:280px;}
+
+  /* Animasi masuk saat halaman dibuka (hero) */
+  @media (prefers-reduced-motion: no-preference){
+    .hero-text{animation:fade-rise .8s ease-out both;}
+    .hero-photo{animation:fade-rise .8s ease-out .15s both;}
+  }
+  @keyframes fade-rise{
+    from{opacity:0;transform:translateY(16px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* Animasi muncul saat discroll. Progressive enhancement: berjalan di browser yang
+     mendukung animation-timeline (Chrome, Edge, Safari terbaru). Di browser yang belum
+     mendukung (misal Firefox versi tertentu), konten langsung tampil normal tanpa animasi. */
+  @keyframes reveal-in{
+    from{opacity:0;transform:translateY(24px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @media (prefers-reduced-motion: no-preference){
+    @supports (animation-timeline: view()){
+      .reveal{
+        animation:reveal-in linear both;
+        animation-timeline:view();
+        animation-range:entry;
+      }
+    }
+  }
+
+  /* Buttons */
+  .btn{
+    display:inline-block;padding:0.75rem 1.5rem;font-weight:600;font-size:0.95rem;
+    text-decoration:none;border:1px solid transparent;transition:background-color .15s ease,color .15s ease,border-color .15s ease;
+  }
+  .btn-primary{background:var(--amber);color:#fff;}
+  .btn-primary:hover{background:var(--amber-deep);}
+  .btn-secondary{background:transparent;border-color:var(--ink);color:var(--ink);}
+  .btn-secondary:hover{background:var(--ink);color:var(--paper);}
+
+  /* Media placeholder (dipakai ulang di foto profil, galeri project, sertifikat) */
+  .media-placeholder{
+    border:1px dashed var(--line);background:var(--paper-alt);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;
+    padding:1.5rem 1rem;min-height:140px;color:var(--steel);font-size:0.85rem;text-align:center;
+  }
+  .media-placeholder svg{width:26px;height:26px;stroke:var(--steel);}
+
+  /* Lightbox foto: klik gambar untuk memperbesar di halaman yang sama, tanpa tab baru */
+  .lightbox-link{display:block;cursor:zoom-in;}
+  .lightbox-overlay{
+    display:none;position:fixed;inset:0;z-index:100;
+    background:rgba(23,36,49,0.92);
+    align-items:center;justify-content:center;padding:2rem;
+  }
+  .lightbox-overlay:target{display:flex;}
+  .lightbox-overlay-bg{position:absolute;inset:0;z-index:0;}
+  .lightbox-overlay img{max-width:90vw;max-height:85vh;width:auto;position:relative;z-index:1;}
+  .lightbox-close{
+    position:absolute;top:1.25rem;right:1.5rem;z-index:2;
+    color:var(--paper);font-family:var(--font-mono);font-size:1.5rem;line-height:1;text-decoration:none;
+    width:2.25rem;height:2.25rem;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--paper);
+  }
+  .lightbox-close:hover{background:var(--paper);color:var(--ink);}
+
+  /* About */
+  .about-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:2.5rem;align-items:start;}
+  .about-facts{
+    background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--blueprint);
+    padding:1.75rem;
+  }
+  .facts-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1rem;}
+  .facts-list li{display:flex;flex-direction:column;gap:0.2rem;border-top:1px solid var(--line);padding-top:1rem;}
+  .facts-list li:first-child{border-top:none;padding-top:0;}
+  .facts-label{font-family:var(--font-mono);font-size:0.75rem;color:var(--steel);}
+  .facts-value{font-size:0.95rem;font-weight:500;}
+  @media (max-width:800px){
+    .about-grid{grid-template-columns:1fr;}
+  }
+
+  /* Field label pattern (untuk Latar belakang, Tools & teknologi) */
+  .field{margin-top:1.1rem;}
+  .field-label{display:block;font-family:var(--font-mono);font-size:0.75rem;color:var(--steel);margin-bottom:0.35rem;}
+
+  /* Projects */
+  .project-list{display:flex;flex-direction:column;gap:2.5rem;}
+  .project{
+    background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--blueprint);
+    padding:2rem;
+    transition:box-shadow .2s ease, border-left-color .2s ease;
+  }
+  .project:hover{box-shadow:0 10px 24px rgba(23,36,49,0.1);border-left-color:var(--amber);}
+  .project h3{font-size:1.25rem;font-weight:600;margin-bottom:0.25rem;}
+  .project-period{font-family:var(--font-mono);font-size:0.85rem;color:var(--steel);margin-bottom:1.25rem;}
+  .project-period em{font-style:normal;color:var(--blueprint);}
+  .project-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.5rem;}
+  .project-gallery iframe{width:100%;aspect-ratio:16/9;height:auto;border:0;grid-column:span 1;}
+  .tag-list{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;}
+  .tag{
+    font-family:var(--font-mono);font-size:0.75rem;color:var(--blueprint);
+    border:1px solid var(--line);padding:0.2rem 0.55rem;margin:0 0.4rem 0.4rem 0;background:var(--paper);
+  }
+  .project-links{margin-top:1.4rem;}
+  .link-code{
+    font-family:var(--font-mono);font-size:0.85rem;color:var(--blueprint);text-decoration:none;
+    border:1px solid var(--line);padding:0.45rem 0.9rem;display:inline-block;
+  }
+  .link-code:hover{background:var(--blueprint);color:#fff;border-color:var(--blueprint);}
+  .role-list{list-style:disc;padding-left:1.3rem;margin:0;max-width:62ch;}
+  .role-list li{margin-bottom:0.4rem;}
+
+  /* Timeline */
+  .timeline{border-left:2px solid var(--line);margin-left:0.5rem;padding-left:2rem;display:flex;flex-direction:column;gap:2.25rem;}
+  .timeline-item{position:relative;}
+  .timeline-item::before{
+    content:"";position:absolute;left:-2.14rem;top:0.4rem;width:10px;height:10px;
+    background:var(--amber);border:2px solid var(--paper-alt);border-radius:50%;
+  }
+  .timeline-year{font-family:var(--font-mono);font-size:0.85rem;color:var(--blueprint);font-weight:600;margin-bottom:0.3rem;}
+  .timeline-title{font-size:1.05rem;font-weight:600;margin:0 0 0.15rem;}
+  .timeline-org{font-size:0.9rem;color:var(--steel);margin-bottom:0.5rem;}
+  .timeline-desc{margin:0;}
+
+  /* Subsection pattern (dipakai di Riwayat dan Keahlian) */
+  .subsection-title{font-size:1.1rem;font-weight:600;color:var(--blueprint-deep);margin-bottom:1.25rem;}
+  .subsection + .subsection{margin-top:2.75rem;}
+
+  /* Skills */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;}
+  .skill-group h3{font-size:1.02rem;font-weight:600;color:var(--ink);}
+  .skill-group ul{list-style:none;padding:0;margin:0;}
+  .skill-group li{padding:0.35rem 0;border-top:1px solid var(--line);font-size:0.95rem;}
+  .skill-group li:first-child{border-top:none;}
+
+  /* Certificates */
+  .certificates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+  .certificate-card{background:var(--panel);border:1px solid var(--line);transition:box-shadow .2s ease;}
+  .certificate-card:hover{box-shadow:0 10px 24px rgba(23,36,49,0.1);}
+  .certificate-media{aspect-ratio:4/3;min-height:0;}
+  .certificate-body{padding:1rem 1.1rem 1.2rem;}
+  .certificate-title{font-size:0.98rem;font-weight:600;margin:0 0 0.25rem;max-width:none;}
+  .certificate-meta{font-size:0.82rem;color:var(--steel);font-family:var(--font-mono);margin:0;max-width:none;}
+
+  /* Contact */
+  .contact-list{list-style:none;padding:0;margin:1.5rem 0 2rem;display:flex;flex-direction:column;gap:0.6rem;}
+  .contact-list li{display:flex;gap:0.75rem;align-items:baseline;flex-wrap:wrap;}
+  .contact-label{font-family:var(--font-mono);font-size:0.8rem;color:var(--steel);min-width:80px;}
+
+  footer{
+    padding:2.5rem 0;border-top:1px solid var(--line);
+    color:var(--steel);font-size:0.85rem;
+  }
+
+  @media (max-width:800px){
+    .hero{grid-template-columns:1fr;padding-top:3rem;}
+    .hero-photo{order:-1;max-width:280px;margin:0 auto;}
+    .project-gallery{grid-template-columns:1fr 1fr;}
+    .skills-grid{grid-template-columns:1fr;}
+    .certificates-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:2.1rem;}
+  }
+  @media (max-width:480px){
+    .project-gallery{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <a class="nav-name" href="#hero">Muhammad Sibyan Nafil Ilmi</a>
+    <ul class="nav-links">
+      <li><a href="#about">Tentang</a></li>
+      <li><a href="#riwayat">Riwayat</a></li>
+      <li><a href="#projects">Project</a></li>
+      <li><a href="#skills">Keahlian</a></li>
+      <li><a href="#sertifikat">Sertifikat</a></li>
+      <li><a href="#contact">Kontak</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+  <section id="hero" class="hero">
+      <div class="hero-text">
+        <h1>Muhammad Sibyan Nafil Ilmi</h1>
+        <p class="role">Mechatronics Engineer passionate about Industrial Automation, Embedded Systems, Robotics, and IoT Development.</p>
+        <p class="meta">D4 Teknologi Rekayasa Mekatronika, Politeknik Negeri Jember</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">Lihat Project</a>
+          <a class="btn btn-secondary" href="#contact">Hubungi Saya</a>
+        </div>
+      </div>
+      <!-- GANTI: ganti kotak di bawah ini dengan foto profil Anda. Supaya bisa diklik untuk
+           diperbesar (tanpa tab baru), pakai pola lightbox berikut, bukan <img> biasa:
+           <div class="hero-photo">
+             <a href="#lightbox-foto-profil" class="lightbox-link">
+               <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
+             </a>
+           </div>
+           <div id="lightbox-foto-profil" class="lightbox-overlay">
+             <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+             <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
+             <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+           </div>
+           (letakkan div id="lightbox-foto-profil" ini di luar/setelah section hero, jangan
+           bersarang di dalamnya, supaya tidak mengganggu tata letak) -->
+      <div class="hero-photo">
+        <div class="media-placeholder hero-photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <span>Foto profil Anda</span>
+        </div>
+      </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title reveal">Tentang Saya</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Saya fresh graduate D4 Teknologi Rekayasa Mekatronika dari Politeknik Negeri Jember (IPK 3,93/4,00) dengan pengalaman praktik dalam bidang Otomasi Industri, Embedded Systems, Robotika, Pemrograman PLC dan HMI, Integrasi SCADA, serta IoT (Internet of Things). Selama masa studi saya memperoleh pengalaman praktis melalui berbagai proyek terapan dan riset penelitian seperti pengembangan sistem IoT, teknologi Smart Farming, robotika, dan sistem konveyor.</p>
+          <p>Berpengalaman dalam pengembangan hardware secara end-to-end, mulai dari perancangan sistem, pemrograman mikrokontroler/PLC dan HMI, hingga pengujian serta evaluasi kinerja sistem. Memiliki kemampuan dalam mengintegrasikan komponen mekanik, elektrikal, dan perangkat lunak untuk mengembangkan sistem yang fungsional dan efisien.</p>
+        </div>
+        <!-- GANTI: sesuaikan isi ringkasan ini, atau tambah/kurangi barisnya (copy-paste satu <li> untuk menambah) -->
+        <div class="about-facts">
+          <h3 class="subsection-title">Ringkasan Singkat</h3>
+          <ul class="facts-list">
+            <li><span class="facts-label">Pendidikan</span><span class="facts-value">D4 Teknologi Rekayasa Mekatronika</span></li>
+            <li><span class="facts-label">IPK</span><span class="facts-value">3,93 / 4,00</span></li>
+            <li><span class="facts-label">Status</span><span class="facts-value">Fresh Graduate, Juni 2026</span></li>
+            <li><span class="facts-label">Fokus</span><span class="facts-value">Otomasi Industri, Embedded Systems, Robotika, IoT</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="riwayat" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title reveal">Riwayat Pendidikan dan Pengalaman</h2>
+
+      <div class="subsection">
+        <h3 class="subsection-title">Pendidikan</h3>
+        <!-- GANTI: salin blok class="timeline-item" untuk menambah riwayat pendidikan lain -->
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <p class="timeline-year">September 2022 - Juni 2026</p>
+            <h3 class="timeline-title">D4 Teknologi Rekayasa Mekatronika</h3>
+            <p class="timeline-org">Politeknik Negeri Jember</p>
+            <p class="timeline-desc">Selama Perkuliahan saya mempelajari dan mempraktikan mengenai integrasi antara mekanikal, elektronika, informatika, dan 
+              sistem kendali sehingga dapat merancang, membangun, serta memelihara sistem otomasi secara menyeluruh untuk mencapai tujuan yang diinginkan.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">Magang</h3>
+        <!-- GANTI: salin blok class="timeline-item" untuk menambah pengalaman kerja/magang lain -->
+        <div class="timeline">
+          <div class="timeline-item reveal">
+            <p class="timeline-year">Agustus 2025 - November 2025</p>
+            <h3 class="timeline-title">Magang Staff Produksi</h3>
+            <p class="timeline-org">PT Global Andalan Solusi Sukses</p>
+            <p class="timeline-desc">Memperoleh pengalaman dalam proses manufaktur dan quality control alat speed
+               limiter untuk sistem keselamatan kendaraan. Mempelajari proses inspeksi sensor, aktuator, dan mechanical assembly
+               , serta penerapan root-cause analysis dalam mengidentifikasi dan menyelesaikan defect produksi. Selain itu, mempelajari
+                instalasi sistem kelistrikan kendaraan melalui integrasi wiring harness, cable mapping, dan pemasangan speed limiter
+                 secara langsung pada kendaraan dengan memperhatikan ketepatan, kualitas, dan keselamatan kerja.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">Kompetisi</h3>
+        <!-- GANTI: salin blok class="timeline-item" untuk menambah organisasi/kompetisi lain -->
+        <div class="timeline">
+            <div class="timeline-item reveal">
+            <p class="timeline-year">Februari 2024 - Oktober 2024</p>
+            <h3 class="timeline-title">Finalis PIMNAS-37 (Pekan Ilmiah Nasional ke-37)</h3>
+            <p class="timeline-org">Direktorat Pembelajaran dan Kemahasiswaan (BELMAWA)</p>
+            <p class="timeline-desc"></p>
+          <div class="timeline-item reveal">
+            <p class="timeline-year">Juli 2023 - Oktober 2023</p>
+            <h3 class="timeline-title">Juara 2 Efektif, Kompetisi AITeC5 (Agricultural Innovation Technology Competition ke-5)</h3>
+            <p class="timeline-org">Badan Koordinasi Kemahasiswaan (BAKORMA)</p>
+            <p class="timeline-desc"></p>
+          </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title reveal">Project</h2>
+      <div class="project-list">
+
+        <article class="project reveal">
+          <!-- GANTI: ganti kotak-kotak di bawah ini dengan foto atau video project ini.
+               Untuk foto (bisa diklik untuk diperbesar, tanpa tab baru), pakai pola lightbox ini,
+               ganti ID-UNIK dengan id yang berbeda untuk tiap foto di SELURUH halaman (misal: foto-1, foto-2, dst):
+               <a href="#ID-UNIK" class="lightbox-link"><img src="assets/nama-file.jpg" alt="Deskripsi foto"></a>
+               <div id="ID-UNIK" class="lightbox-overlay">
+                 <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+                 <img src="assets/nama-file.jpg" alt="Deskripsi foto">
+                 <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+               </div>
+               (div id="ID-UNIK" ini taruh tepat setelah kotak medianya, masih di dalam project-gallery tidak masalah)
+               Untuk video YouTube: <iframe src="https://www.youtube-nocookie.com/embed/ID_VIDEO" title="Judul video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+               Jumlahnya tidak harus 3. Kalau foto/video Anda lebih banyak, tinggal copy-paste
+               div class="media-placeholder" tambahan di dalam project-gallery ini, otomatis akan
+               tersusun rapi ke baris berikutnya (3 per baris). Kalau kurang dari 3, hapus saja sisanya. -->
+          <div class="project-gallery">
+            <iframe src="https://www.youtube-nocookie.com/embed/LqgnrEhI7wM" title="Demo Path Planning 4-Wheeled Omnidirectional Cellular Conveyor Berbasis Raspberry Pi" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe src="https://www.youtube-nocookie.com/embed/fiGFTaPPUnU" title="Hasil Path Tracking Box pada sistem 4-Wheeled Omnidirectional Conveyor" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="media-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg><span>Foto/video 3</span></div>
+          </div>
+          <div class="project-body">
+            <h3>[Skripsi] Pengembangan Algoritma Path Planning Pada Sistem 4-Wheeled Omnidirectional Cellular Conveyor Berbasis Raspberry Pi</h3>
+            <p class="project-period">Periode: <em>Januari 2026 - Mei 2026</em></p>
+            <div class="field">
+              <span class="field-label">Latar belakang</span>
+              <p>Skripsi saya membahas mengenai pengembangan algoritma path planning untuk sistem modular 4-wheeled omnidirectional cellular conveyor
+                 guna mengoptimalkan proses pemindahan material secara otomatis. Merancang mekanisme dynamic routing pada sistem conveyor berbasis grid,
+                  dengan setiap cell dikendalikan oleh mikrokontroler individual dan dikoordinasikan melalui Raspberry Pi sebagai pengendali pusat. 
+                  Sistem yang dikembangkan meningkatkan fleksibilitas dan efisiensi routing dibandingkan dengan sistem conveyor konvensional yang 
+                  menggunakan jalur tetap.</p>
+            </div>
+            <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
+            <div class="field">
+              <span class="field-label">Peran</span>
+              <ul class="role-list">
+                <li>Merancang arsitektur sistem kendali dengan Raspberry Pi 5 sebagai master dan beberapa mikrokontroler ESP32 sebagai slave node, yang masing-masing mengendalikan satu cell konveyor.</li>
+                <li>Melakukan kalibrasi RPM motor penggerak pada seluruh cell konveyor dengan tingkat akurasi hingga 97%</li>
+                <li>Merancang dan mengimplementasikan algoritma Dijkstra untuk path planning pada weighted grid graph 8 arah</li>
+                <li>Mengembangkan antarmuka GUI monitoring secara real-time untuk visualisasi dan pengendalian sistem.</li>
+                <li> Mengimplementasikan pelacakan visual berbasis ArUco marker menggunakan OpenCV untuk melacak pergerakan box.</li>
+              </ul>
+            </div>
+            <div class="field">
+              <span class="field-label">Tools &amp; teknologi</span>
+              <ul class="tag-list">
+                <li class="tag">Raspberry Pi 5</li><li class="tag">ESP32</li><li class="tag">I2C</li><li class="tag">Algoritma Dijkstra</li><li class="tag">OpenCV</li><li class="tag">Modbus RS-485</li>
+                <li class="tag">Sensor Encoder</li><li class="tag">Sensor Proximity</li><li class="tag">Motor DC</li><li class="tag">Sistem Conveyor</li>
+              </ul>
+            </div>
+            <!-- GANTI: ganti "#" dengan link repository code Anda -->
+            <div class="project-links">
+              <a class="link-code" href="#" target="_blank" rel="noopener">Lihat kode</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-gallery">
+            <iframe src="https://www.youtube-nocookie.com/embed/dBTz2ocGle4" title="Demo Alat Soil Nutrients Monitoring" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="media-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg><span>Foto/video 2</span></div>
+            <div class="media-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg><span>Foto/video 3</span></div>
+          </div>
+          <div class="project-body">
+            <h3>Soil Nutrients Monitoring</h3>
+            <p class="project-period">Periode: <em>Febuari 2024 - Oktober 2024</em></p>
+            <div class="field">
+              <span class="field-label">Latar belakang</span>
+              <p>Soil Nutrients Monitoring merupakan perangkat monitoring tanah portabel berbasis IoT yang dikembangkan untuk mengukur kandungan NPK, 
+                pH, suhu, dan kelembapan tanah sebagai alternatif pengujian laboratorium yang lebih cepat dan tidak merusak sampel tanah. Analisis kondisi 
+                tanah dilakukan dengan mengacu pada standar Kementerian Pertanian Republik Indonesia untuk menghasilkan penilaian kondisi tanah dan 
+                rekomendasi tanaman yang sesuai. Protokol komunikasi Bluetooth Low Energy (BLE) digunakan untuk mengirimkan data hasil pengukuran yang 
+                tersimpan pada mikrokontroler ke aplikasi mobile untuk proses analisis dan penyajian informasi. Perangkat ini mencapai Tingkat Kesiapterapan 
+                Teknologi (TKT) 4 melalui proses validasi di laboratorium, dengan akurasi sensor di atas 95%. Proyek ini juga berhasil lolos finalis Pekan 
+                Ilmiah Mahasiswa Nasional (PIMNAS) ke-37.</p>
+            </div>
+            <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
+            <div class="field">
+              <span class="field-label">Peran</span>
+              <ul class="role-list">
+                <li>Memimpin pengembangan perangkat keras secara end-to-end, meliputi perancangan arsitektur sistem berdasarkan kebutuhan dan permasalahan, desain perangkat keras 3D, perancangan skematik PCB, pemrograman mikrokontroler, fabrikasi dan perakitan perangkat keras, hingga kalibrasi sensor.</li>
+                <li>Melakukan kalibrasi berbagai sensor, meliputi sensor NPK, pH, suhu, dan kelembapan tanah, dengan tingkat akurasi di atas 95%.</li>
+                <li>Melakukan pengujian fungsional dan validasi untuk memastikan sistem perangkat keras beroperasi secara andal serta memenuhi kebutuhan dan kinerja yang telah ditentukan.</li>
+              </ul>
+            </div>
+            <div class="field">
+              <span class="field-label">Tools &amp; teknologi</span>
+              <ul class="tag-list">
+                <li class="tag">ESP32</li><li class="tag">Sensor Suhu</li><li class="tag">Sensor pH</li><li class="tag">Sensor NPK</li><li class="tag">Sensor Kelembapan Tanah</li><li class="tag">Internet of Things (IoT)</li>
+                <li class="tag">Bluetooth Low Energy (BLE)</li><li class="tag">Smart Farming</li>
+              </ul>
+            </div>
+            <div class="project-links">
+              <a class="link-code" href="#" target="_blank" rel="noopener">Lihat kode</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-gallery">
+            <iframe src="https://www.youtube-nocookie.com/embed/3kndaaVb0OY" title="Automatic Nutrition Mixing Hidroponics" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div class="media-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg><span>Foto/video 2</span></div>
+            <div class="media-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg><span>Foto/video 3</span></div>
+          </div>
+          <div class="project-body">
+            <h3>Automatic Nutrition Mixing for Hydroponics</h3>
+            <p class="project-period">Periode: <em>Juli 2023 &ndash; Oktober 2023</em></p>
+            <div class="field">
+              <span class="field-label">Latar belakang</span>
+              <p>Proyek ini bertujuan untuk mengembangkan sistem pencampuran nutrisi otomatis berbasis IoT untuk budidaya hidroponik NFT guna mengotomatisasi proses pencampuran nutrisi AB Mix, 
+                menggantikan proses pemantauan nutrisi secara manual yang berisiko menyebabkan ketidakkonsistenan dosis dan kesalahan manusia. Mengintegrasikan mikrokontroler 
+                Arduino Mega dengan modul Wi-Fi ESP8266, sensor TDS, sensor ketinggian air, dan sensor aliran air, serta platform IoT Blynk untuk memungkinkan pemantauan dan pengendalian 
+                konsentrasi nutrisi, ketinggian air, dan laju aliran secara real-time melalui aplikasi mobile. Alat ini berhasil memenangkan juara 2 efektif pada kompetisi AITeC5 (Agricultural
+                 Innovation Technology Competition ke-5).</p>
+            </div>
+            <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
+            <div class="field">
+              <span class="field-label">Peran</span>
+              <ul class="role-list">
+                <li>Memilih, memasang, mengkalibrasi, dan menguji sensor TDS, sensor ketinggian air, serta sensor aliran air.</li>
+                <li>Merancang rangkaian kelistrikan, menentukan wiring, power supply, driver aktuator, serta integrasi antar-komponen.</li>
+                <li>Melakukan pengujian sistem, kalibrasi sensor, validasi dosis nutrisi, dan mengevaluasi performa alat.</li>
+              </ul>
+            </div>
+            <div class="field">
+              <span class="field-label">Tools &amp; teknologi</span>
+              <ul class="tag-list">
+                <li class="tag">Arduino Mega + ESP8266</li><li class="tag">Sensor TDS Meter</li><li class="tag">Sensor Water Level</li><li class="tag">Sensor Water Level</li>
+                <li class="tag">Peristaltic Pumps</li><li class="tag">Blynk IoT</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-gallery">
+            <iframe src="https://www.youtube-nocookie.com/embed/aykD4BpQjuA" title="Proses R&D Robot Monitoring Greenhouse Berbasis IoT" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div class="media-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg><span>Foto/video 2</span></div>
+            <div class="media-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg><span>Foto/video 3</span></div>
+          </div>
+          <div class="project-body">
+            <h3>Robot Monitoring Greenhouse Berbasis IoT</h3>
+            <p class="project-period">Periode: <em>Juli 2023 &ndash; Oktober 2023</em></p>
+            <div class="field">
+              <span class="field-label">Latar belakang</span>
+              <p>Mengembangkan robot monitoring greenhouse berbasis IoT yang berfungsi untuk memantau kondisi lingkungan secara real-time, 
+                meliputi suhu, kelembapan, dan parameter lingkungan lainnya. Sistem dirancang untuk membantu petani memperoleh informasi 
+                kondisi greenhouse secara lebih cepat dan mudah melalui pemantauan jarak jauh, sehingga kondisi lingkungan dapat dipantau 
+                secara berkala dan tindakan yang diperlukan dapat dilakukan secara lebih responsif untuk mendukung pertumbuhan tanaman yang optimal.</p>
+            </div>
+            <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
+            <div class="field">
+              <span class="field-label">Peran</span>
+              <ul class="role-list">
+                <li>Merancang skema sistem kelistrikan untuk robot monitoring greenhouse.</li>
+                <li>Mendesain rangka dan body robot dalam bentuk 3D menggunakan perangkat lunak Autodesk Inventor.</li>
+                <li>Melakukan proses wiring dan integrasi sistem kelistrikan pada robot monitoring greenhouse.</li>
+                <li>Melakukan pengujian sistem, troubleshooting, dan debugging untuk memastikan seluruh sistem berfungsi secara optimal.</li>
+              </ul>
+            </div>
+            <div class="field">
+              <span class="field-label">Tools &amp; teknologi</span>
+              <ul class="tag-list">
+                <li class="tag">Autodesk Inventor</li><li class="tag">Firebase</li><li class="tag">Raspberry Pi</li><li class="tag">Arduino</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title reveal">Keahlian</h2>
+
+      <div class="subsection">
+        <h3 class="subsection-title">Technical Skills</h3>
+        <div class="skills-grid">
+          <div class="skill-group">
+            <h3>Desain 2D/3D</h3>
+            <ul>
+              <li>Autodesk Inventor</li>
+              <li>AutoCAD</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>PCB Desain</h3>
+            <ul>
+              <li>Eagle</li>
+              <li>Kicad</li>
+              <li>Altium Designer</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>PLC&amp;HMI</h3>
+            <ul>
+              <li>Omron</li>
+              <li>Schneider</li>
+              <li>Haiwell</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Embedded &amp; Firmware Development</h3>
+            <ul>
+              <li>Arduino IDE</li>
+              <li>PlatformIO</li>
+              <li>STM32CubeIDE</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Pemrograman</h3>
+            <ul>
+              <li>C&#47;C++</li>
+              <li>Python</li>
+              <li>Ladder Diagram (LD)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">Soft Skills</h3>
+        <!-- GANTI: daftar berikut hanya contoh, sesuaikan dengan diri Anda sendiri -->
+        <ul class="tag-list">
+          <li class="tag">Problem Solving &amp; Analytical Thinking</li>
+          <li class="tag">Cross-functional Collaboration</li>
+          <li class="tag">Project Planning &amp; Management</li>
+          <li class="tag">Leadership &amp; Team Coordination</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="sertifikat" class="section">
+    <div class="container">
+      <h2 class="section-title reveal">Sertifikasi dan Pencapaian</h2>
+      <!-- GANTI: tambahkan sertifikat Anda (sertifikat lomba maupun sertifikasi kompetensi).
+           Salin (copy-paste) satu blok class="certificate-card" untuk tiap sertifikat baru.
+           Untuk foto sertifikat (bisa diklik untuk diperbesar, tanpa tab baru), pakai pola lightbox
+           yang sama seperti dijelaskan di komentar bagian Project (cari kata "ID-UNIK"). -->
+      <div class="certificates-grid">
+        <div class="certificate-card reveal">
+          <div class="media-placeholder certificate-media">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg>
+            <span>Foto sertifikat</span>
+          </div>
+          <div class="certificate-body">
+            <p class="certificate-title">Mechatronics Engineer Certification</p>
+            <p class="certificate-meta">Badan Nasional Sertifikasi Profesi (BNSP), 2026-2029</p>
+          </div>
+        </div>
+        <div class="certificate-card reveal">
+          <div class="media-placeholder certificate-media">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg>
+            <span>Foto sertifikat</span>
+          </div>
+          <div class="certificate-body">
+            <p class="certificate-title">Sertifikat PKM-KC 2024</p>
+            <p class="certificate-meta">Direktorat Jendral Pendidikan Vokasi, 2024</p>
+          </div>
+        </div>
+        <div class="certificate-card reveal">
+          <div class="media-placeholder certificate-media">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg>
+            <span>Foto sertifikat</span>
+          </div>
+          <div class="certificate-body">
+            <p class="certificate-title">Sertifikat AITeC 5 (Juara 2 Efektif)</p>
+            <p class="certificate-meta">Direktorat Jendral Pendidikan Vokasi, 2023</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title reveal">Kontak</h2>
+      <p>Tertarik berdiskusi soal project atau peluang kerja sama? Hubungi saya melalui salah satu kanal berikut.</p>
+      <!-- GANTI: ganti email, telepon, LinkedIn, dan GitHub di bawah ini dengan milik Anda -->
+      <ul class="contact-list">
+        <li><span class="contact-label">Email</span><a href="mailto:nafililmi1@gmail.com">nafililmi1@gmail.com</a></li>
+        <li><span class="contact-label">Telepon</span><a href="tel:+6281391145403">+62 813-9114-5403</a></li>
+        <li><span class="contact-label">LinkedIn</span><a href="https://linkedin.com/in/muhammad-sibyan-nafili-lmi" target="_blank" rel="noopener">linkedin.com/in/muhammad-sibyan-nafili-lmi</a></li>
+      </ul>
+      <!-- GANTI: upload file CV Anda dengan nama persis "CV-Muhammad-Sibyan-Nafil-Ilmi.pdf" di folder yang sama dengan index.html, atau ubah nama file di href ini -->
+      <a class="btn btn-primary" href="CV-Muhammad-Sibyan-Nafil-Ilmi.pdf" download>Unduh CV</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p style="margin:0;">&copy; 2026 Muhammad Sibyan Nafil Ilmi</p>
+  </div>
+</footer>
+
+</body>
+</html>
