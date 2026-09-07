@@ -98,22 +98,26 @@
   .hero-actions{display:flex;gap:1rem;margin-top:1.75rem;flex-wrap:wrap;}
   .hero-photo-placeholder{aspect-ratio:4/5;min-height:280px;}
 
-  /* Animasi masuk saat halaman dibuka (hero) */
+  /* Animasi masuk saat halaman dibuka (hero). Sengaja hanya opacity (tanpa transform):
+     transform pada elemen induk akan membuat lightbox foto yang bersarang di dalamnya
+     salah posisi (position:fixed jadi mengikuti elemen itu, bukan layar penuh). */
   @media (prefers-reduced-motion: no-preference){
-    .hero-text{animation:fade-rise .8s ease-out both;}
-    .hero-photo{animation:fade-rise .8s ease-out .15s both;}
+    .hero-text{animation:fade-in .8s ease-out both;}
+    .hero-photo{animation:fade-in .8s ease-out .15s both;}
   }
-  @keyframes fade-rise{
-    from{opacity:0;transform:translateY(16px);}
-    to{opacity:1;transform:translateY(0);}
+  @keyframes fade-in{
+    from{opacity:0;}
+    to{opacity:1;}
   }
 
   /* Animasi muncul saat discroll. Progressive enhancement: berjalan di browser yang
      mendukung animation-timeline (Chrome, Edge, Safari terbaru). Di browser yang belum
-     mendukung (misal Firefox versi tertentu), konten langsung tampil normal tanpa animasi. */
+     mendukung (misal Firefox versi tertentu), konten langsung tampil normal tanpa animasi.
+     Sama seperti di atas, sengaja hanya opacity, tanpa transform, supaya lightbox foto yang
+     bersarang di dalam project/sertifikat tetap tampil layar penuh dengan benar. */
   @keyframes reveal-in{
-    from{opacity:0;transform:translateY(24px);}
-    to{opacity:1;transform:translateY(0);}
+    from{opacity:0;}
+    to{opacity:1;}
   }
   @media (prefers-reduced-motion: no-preference){
     @supports (animation-timeline: view()){
@@ -290,29 +294,24 @@
           <a class="btn btn-secondary" href="#contact">Hubungi Saya</a>
         </div>
       </div>
-      <!-- GANTI: ganti kotak di bawah ini dengan foto profil Anda. Supaya bisa diklik untuk
-           diperbesar (tanpa tab baru), pakai pola lightbox berikut, bukan <img> biasa:
-           <div class="hero-photo">
-             <a href="#lightbox-foto-profil" class="lightbox-link">
-               <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
-             </a>
-           </div>
-           <div id="lightbox-foto-profil" class="lightbox-overlay">
+      <!-- Foto profil, bisa diklik untuk diperbesar tanpa tab baru (lightbox).
+           Kalau menambah foto baru di bagian lain, gunakan pola yang sama:
+           <a href="#ID-UNIK" class="lightbox-link"><img src="..." alt="..."></a>
+           <div id="ID-UNIK" class="lightbox-overlay">
              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-             <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
+             <img src="..." alt="...">
              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
            </div>
-           (letakkan div id="lightbox-foto-profil" ini di luar/setelah section hero, jangan
-           bersarang di dalamnya, supaya tidak mengganggu tata letak) -->
+           ID-UNIK harus berbeda untuk tiap foto di seluruh halaman. -->
       <div class="hero-photo">
-   <a href="#foto-1" class="lightbox-link">
-     <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
-   </a>
-   <div id="foto-1" class="lightbox-overlay">
-     <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-     <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
-     <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-   </div>
+        <a href="#foto-1" class="lightbox-link">
+          <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
+        </a>
+        <div id="foto-1" class="lightbox-overlay">
+          <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+          <img src="assets/foto-profil.jpg" alt="Foto Muhammad Sibyan Nafil Ilmi">
+          <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+        </div>
       </div>
   </section>
 
@@ -324,7 +323,7 @@
           <p>Saya fresh graduate D4 Teknologi Rekayasa Mekatronika dari Politeknik Negeri Jember (IPK 3,93/4,00) dengan pengalaman praktik dalam bidang Otomasi Industri, Embedded Systems, Robotika, Pemrograman PLC dan HMI, Integrasi SCADA, serta IoT (Internet of Things). Selama masa studi saya memperoleh pengalaman praktis melalui berbagai proyek terapan dan riset penelitian seperti pengembangan sistem IoT, teknologi Smart Farming, robotika, dan sistem konveyor.</p>
           <p>Berpengalaman dalam pengembangan hardware secara end-to-end, mulai dari perancangan sistem, pemrograman mikrokontroler/PLC dan HMI, hingga pengujian serta evaluasi kinerja sistem. Memiliki kemampuan dalam mengintegrasikan komponen mekanik, elektrikal, dan perangkat lunak untuk mengembangkan sistem yang fungsional dan efisien.</p>
         </div>
-        <!-- GANTI: sesuaikan isi ringkasan ini, atau tambah/kurangi barisnya (copy-paste satu <li> untuk menambah) -->
+        <!-- GANTI: sesuaikan isi ringkasan ini, atau tambah/kurangi barisnya (copy-paste satu li untuk menambah) -->
         <div class="about-facts">
           <h3 class="subsection-title">Ringkasan Singkat</h3>
           <ul class="facts-list">
@@ -350,8 +349,7 @@
             <p class="timeline-year">September 2022 - Juni 2026</p>
             <h3 class="timeline-title">D4 Teknologi Rekayasa Mekatronika</h3>
             <p class="timeline-org">Politeknik Negeri Jember</p>
-            <p class="timeline-desc">Selama Perkuliahan saya mempelajari dan mempraktikan mengenai integrasi antara mekanikal, elektronika, informatika, dan 
-              sistem kendali sehingga dapat merancang, membangun, serta memelihara sistem otomasi secara menyeluruh untuk mencapai tujuan yang diinginkan.</p>
+            <p class="timeline-desc">Selama Perkuliahan saya mempelajari dan mempraktikan mengenai integrasi antara mekanikal, elektronika, informatika, dan sistem kendali sehingga dapat merancang, membangun, serta memelihara sistem otomasi secara menyeluruh untuk mencapai tujuan yang diinginkan.</p>
           </div>
         </div>
       </div>
@@ -364,11 +362,7 @@
             <p class="timeline-year">Agustus 2025 - November 2025</p>
             <h3 class="timeline-title">Magang Staff Produksi</h3>
             <p class="timeline-org">PT Global Andalan Solusi Sukses</p>
-            <p class="timeline-desc">Memperoleh pengalaman dalam proses manufaktur dan quality control alat speed
-               limiter untuk sistem keselamatan kendaraan. Mempelajari proses inspeksi sensor, aktuator, dan mechanical assembly
-               , serta penerapan root-cause analysis dalam mengidentifikasi dan menyelesaikan defect produksi. Selain itu, mempelajari
-                instalasi sistem kelistrikan kendaraan melalui integrasi wiring harness, cable mapping, dan pemasangan speed limiter
-                 secara langsung pada kendaraan dengan memperhatikan ketepatan, kualitas, dan keselamatan kerja.</p>
+            <p class="timeline-desc">Memperoleh pengalaman dalam proses manufaktur dan quality control alat speed limiter untuk sistem keselamatan kendaraan. Mempelajari proses inspeksi sensor, aktuator, dan mechanical assembly, serta penerapan root-cause analysis dalam mengidentifikasi dan menyelesaikan defect produksi. Selain itu, mempelajari instalasi sistem kelistrikan kendaraan melalui integrasi wiring harness, cable mapping, dan pemasangan speed limiter secara langsung pada kendaraan dengan memperhatikan ketepatan, kualitas, dan keselamatan kerja.</p>
           </div>
         </div>
       </div>
@@ -377,17 +371,17 @@
         <h3 class="subsection-title">Kompetisi</h3>
         <!-- GANTI: salin blok class="timeline-item" untuk menambah organisasi/kompetisi lain -->
         <div class="timeline">
-            <div class="timeline-item reveal">
-            <p class="timeline-year">Februari 2024 - Oktober 2024</p>
-            <h3 class="timeline-title">Finalis PIMNAS-37 (Pekan Ilmiah Nasional ke-37)</h3>
-            <p class="timeline-org">Direktorat Pembelajaran dan Kemahasiswaan (BELMAWA)</p>
-            <p class="timeline-desc"></p>
           <div class="timeline-item reveal">
             <p class="timeline-year">Juli 2023 - Oktober 2023</p>
             <h3 class="timeline-title">Juara 2 Efektif, Kompetisi AITeC5 (Agricultural Innovation Technology Competition ke-5)</h3>
             <p class="timeline-org">Badan Koordinasi Kemahasiswaan (BAKORMA)</p>
             <p class="timeline-desc"></p>
           </div>
+          <div class="timeline-item reveal">
+            <p class="timeline-year">Februari 2024 - Oktober 2024</p>
+            <h3 class="timeline-title">Finalis PIMNAS-37 (Pekan Ilmiah Nasional ke-37)</h3>
+            <p class="timeline-org">Direktorat Pembelajaran dan Kemahasiswaan (BELMAWA)</p>
+            <p class="timeline-desc"></p>
           </div>
         </div>
       </div>
@@ -425,11 +419,7 @@
             <p class="project-period">Periode: <em>Januari 2026 - Mei 2026</em></p>
             <div class="field">
               <span class="field-label">Latar belakang</span>
-              <p>Skripsi saya membahas mengenai pengembangan algoritma path planning untuk sistem modular 4-wheeled omnidirectional cellular conveyor
-                 guna mengoptimalkan proses pemindahan material secara otomatis. Merancang mekanisme dynamic routing pada sistem conveyor berbasis grid,
-                  dengan setiap cell dikendalikan oleh mikrokontroler individual dan dikoordinasikan melalui Raspberry Pi sebagai pengendali pusat. 
-                  Sistem yang dikembangkan meningkatkan fleksibilitas dan efisiensi routing dibandingkan dengan sistem conveyor konvensional yang 
-                  menggunakan jalur tetap.</p>
+              <p>Skripsi saya membahas mengenai pengembangan algoritma path planning untuk sistem modular 4-wheeled omnidirectional cellular conveyor guna mengoptimalkan proses pemindahan material secara otomatis. Merancang mekanisme dynamic routing pada sistem conveyor berbasis grid, dengan setiap cell dikendalikan oleh mikrokontroler individual dan dikoordinasikan melalui Raspberry Pi sebagai pengendali pusat. Sistem yang dikembangkan meningkatkan fleksibilitas dan efisiensi routing dibandingkan dengan sistem conveyor konvensional yang menggunakan jalur tetap.</p>
             </div>
             <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
             <div class="field">
@@ -439,7 +429,7 @@
                 <li>Melakukan kalibrasi RPM motor penggerak pada seluruh cell konveyor dengan tingkat akurasi hingga 97%</li>
                 <li>Merancang dan mengimplementasikan algoritma Dijkstra untuk path planning pada weighted grid graph 8 arah</li>
                 <li>Mengembangkan antarmuka GUI monitoring secara real-time untuk visualisasi dan pengendalian sistem.</li>
-                <li> Mengimplementasikan pelacakan visual berbasis ArUco marker menggunakan OpenCV untuk melacak pergerakan box.</li>
+                <li>Mengimplementasikan pelacakan visual berbasis ArUco marker menggunakan OpenCV untuk melacak pergerakan box.</li>
               </ul>
             </div>
             <div class="field">
@@ -467,13 +457,7 @@
             <p class="project-period">Periode: <em>Febuari 2024 - Oktober 2024</em></p>
             <div class="field">
               <span class="field-label">Latar belakang</span>
-              <p>Soil Nutrients Monitoring merupakan perangkat monitoring tanah portabel berbasis IoT yang dikembangkan untuk mengukur kandungan NPK, 
-                pH, suhu, dan kelembapan tanah sebagai alternatif pengujian laboratorium yang lebih cepat dan tidak merusak sampel tanah. Analisis kondisi 
-                tanah dilakukan dengan mengacu pada standar Kementerian Pertanian Republik Indonesia untuk menghasilkan penilaian kondisi tanah dan 
-                rekomendasi tanaman yang sesuai. Protokol komunikasi Bluetooth Low Energy (BLE) digunakan untuk mengirimkan data hasil pengukuran yang 
-                tersimpan pada mikrokontroler ke aplikasi mobile untuk proses analisis dan penyajian informasi. Perangkat ini mencapai Tingkat Kesiapterapan 
-                Teknologi (TKT) 4 melalui proses validasi di laboratorium, dengan akurasi sensor di atas 95%. Proyek ini juga berhasil lolos finalis Pekan 
-                Ilmiah Mahasiswa Nasional (PIMNAS) ke-37.</p>
+              <p>Soil Nutrients Monitoring merupakan perangkat monitoring tanah portabel berbasis IoT yang dikembangkan untuk mengukur kandungan NPK, pH, suhu, dan kelembapan tanah sebagai alternatif pengujian laboratorium yang lebih cepat dan tidak merusak sampel tanah. Analisis kondisi tanah dilakukan dengan mengacu pada standar Kementerian Pertanian Republik Indonesia untuk menghasilkan penilaian kondisi tanah dan rekomendasi tanaman yang sesuai. Protokol komunikasi Bluetooth Low Energy (BLE) digunakan untuk mengirimkan data hasil pengukuran yang tersimpan pada mikrokontroler ke aplikasi mobile untuk proses analisis dan penyajian informasi. Perangkat ini mencapai Tingkat Kesiapterapan Teknologi (TKT) 4 melalui proses validasi di laboratorium, dengan akurasi sensor di atas 95%. Proyek ini juga berhasil lolos finalis Pekan Ilmiah Mahasiswa Nasional (PIMNAS) ke-37.</p>
             </div>
             <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
             <div class="field">
@@ -508,11 +492,7 @@
             <p class="project-period">Periode: <em>Juli 2023 &ndash; Oktober 2023</em></p>
             <div class="field">
               <span class="field-label">Latar belakang</span>
-              <p>Proyek ini bertujuan untuk mengembangkan sistem pencampuran nutrisi otomatis berbasis IoT untuk budidaya hidroponik NFT guna mengotomatisasi proses pencampuran nutrisi AB Mix, 
-                menggantikan proses pemantauan nutrisi secara manual yang berisiko menyebabkan ketidakkonsistenan dosis dan kesalahan manusia. Mengintegrasikan mikrokontroler 
-                Arduino Mega dengan modul Wi-Fi ESP8266, sensor TDS, sensor ketinggian air, dan sensor aliran air, serta platform IoT Blynk untuk memungkinkan pemantauan dan pengendalian 
-                konsentrasi nutrisi, ketinggian air, dan laju aliran secara real-time melalui aplikasi mobile. Alat ini berhasil memenangkan juara 2 efektif pada kompetisi AITeC5 (Agricultural
-                 Innovation Technology Competition ke-5).</p>
+              <p>Proyek ini bertujuan untuk mengembangkan sistem pencampuran nutrisi otomatis berbasis IoT untuk budidaya hidroponik NFT guna mengotomatisasi proses pencampuran nutrisi AB Mix, menggantikan proses pemantauan nutrisi secara manual yang berisiko menyebabkan ketidakkonsistenan dosis dan kesalahan manusia. Mengintegrasikan mikrokontroler Arduino Mega dengan modul Wi-Fi ESP8266, sensor TDS, sensor ketinggian air, dan sensor aliran air, serta platform IoT Blynk untuk memungkinkan pemantauan dan pengendalian konsentrasi nutrisi, ketinggian air, dan laju aliran secara real-time melalui aplikasi mobile. Alat ini berhasil memenangkan juara 2 efektif pada kompetisi AITeC5 (Agricultural Innovation Technology Competition ke-5).</p>
             </div>
             <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
             <div class="field">
@@ -526,7 +506,7 @@
             <div class="field">
               <span class="field-label">Tools &amp; teknologi</span>
               <ul class="tag-list">
-                <li class="tag">Arduino Mega + ESP8266</li><li class="tag">Sensor TDS Meter</li><li class="tag">Sensor Water Level</li><li class="tag">Sensor Water Level</li>
+                <li class="tag">Arduino Mega + ESP8266</li><li class="tag">Sensor TDS Meter</li><li class="tag">Sensor Water Level</li><li class="tag">Sensor Water Flow</li>
                 <li class="tag">Peristaltic Pumps</li><li class="tag">Blynk IoT</li>
               </ul>
             </div>
@@ -544,10 +524,7 @@
             <p class="project-period">Periode: <em>Juli 2023 &ndash; Oktober 2023</em></p>
             <div class="field">
               <span class="field-label">Latar belakang</span>
-              <p>Mengembangkan robot monitoring greenhouse berbasis IoT yang berfungsi untuk memantau kondisi lingkungan secara real-time, 
-                meliputi suhu, kelembapan, dan parameter lingkungan lainnya. Sistem dirancang untuk membantu petani memperoleh informasi 
-                kondisi greenhouse secara lebih cepat dan mudah melalui pemantauan jarak jauh, sehingga kondisi lingkungan dapat dipantau 
-                secara berkala dan tindakan yang diperlukan dapat dilakukan secara lebih responsif untuk mendukung pertumbuhan tanaman yang optimal.</p>
+              <p>Mengembangkan robot monitoring greenhouse berbasis IoT yang berfungsi untuk memantau kondisi lingkungan secara real-time, meliputi suhu, kelembapan, dan parameter lingkungan lainnya. Sistem dirancang untuk membantu petani memperoleh informasi kondisi greenhouse secara lebih cepat dan mudah melalui pemantauan jarak jauh, sehingga kondisi lingkungan dapat dipantau secara berkala dan tindakan yang diperlukan dapat dilakukan secara lebih responsif untuk mendukung pertumbuhan tanaman yang optimal.</p>
             </div>
             <!-- GANTI: sesuaikan atau lengkapi poin peran berikut sesuai kontribusi spesifik Anda -->
             <div class="field">
