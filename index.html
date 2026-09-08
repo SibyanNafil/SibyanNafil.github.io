@@ -79,6 +79,38 @@
   .nav-links a:hover{color:var(--blueprint);}
   .nav-links a:hover::after{transform:scaleX(1);}
 
+  /* Tombol menu (hamburger) untuk tampilan HP. Murni CSS, tanpa JavaScript:
+     memakai trik checkbox tersembunyi + label sebagai tombolnya. */
+  .nav-toggle-input{
+    position:absolute;opacity:0;pointer-events:none;
+  }
+  .nav-toggle-btn{
+    display:none;
+    align-items:center;justify-content:center;
+    width:36px;height:36px;
+    border:1px solid var(--line);
+    color:var(--ink);font-size:1.1rem;
+    cursor:pointer;
+  }
+  .nav-toggle-btn .icon-close{display:none;}
+  #nav-toggle:checked ~ .nav-toggle-btn .icon-open{display:none;}
+  #nav-toggle:checked ~ .nav-toggle-btn .icon-close{display:block;}
+  #nav-toggle:focus-visible ~ .nav-toggle-btn{outline:2px solid var(--amber);outline-offset:2px;}
+
+  @media (max-width:800px){
+    .nav-toggle-btn{display:flex;}
+    .nav-links{
+      display:none;
+      flex-direction:column;
+      width:100%;
+      gap:0;
+    }
+    #nav-toggle:checked ~ .nav-links{display:flex;}
+    .nav-links li{width:100%;}
+    .nav-links a{display:block;padding:0.85rem 0.2rem;border-top:1px solid var(--line);}
+    .nav-links a::after{display:none;}
+  }
+
   /* Hero */
   .hero{
     position:relative;
@@ -311,6 +343,11 @@
 <header class="site-header">
   <div class="nav-inner">
     <a class="nav-name" href="#hero">Muhammad Sibyan Nafil Ilmi</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Menu">
+      <i class="fa-solid fa-bars icon-open" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark icon-close" aria-hidden="true"></i>
+    </label>
     <ul class="nav-links">
       <li><a href="#about">Tentang</a></li>
       <li><a href="#riwayat">Riwayat</a></li>
@@ -475,7 +512,7 @@
             </div>
             <!-- GANTI: ganti "#" dengan link repository code Anda -->
             <div class="project-links">
-              <a class="link-code" href="#" target="_blank" rel="noopener">Lihat kode</a>
+              <a class="link-code" href="https://github.com/SibyanNafil/4-Wheeled-Omnidirectional-Cellular-Conveyor.git" target="_blank" rel="noopener">Lihat kode</a>
             </div>
           </div>
         </article>
