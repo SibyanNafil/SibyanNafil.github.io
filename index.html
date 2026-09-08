@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
   :root{
     --paper:#EEF0EC;
@@ -58,6 +59,10 @@
     position:sticky;top:0;z-index:10;
     background:var(--panel);
     border-bottom:1px solid var(--line);
+  }
+  /* Saat lightbox foto terbuka, sembunyikan sementara site header, supaya tidak menutupi foto */
+  .site-header:has(~ .lightbox-overlay:target){
+    display:none;
   }
   .nav-inner{
     max-width:1100px;margin:0 auto;padding:1rem 1.5rem;
@@ -127,8 +132,7 @@
   /* Animasi muncul saat discroll. Progressive enhancement: berjalan di browser yang
      mendukung animation-timeline (Chrome, Edge, Safari terbaru). Di browser yang belum
      mendukung (misal Firefox versi tertentu), konten langsung tampil normal tanpa animasi.
-     Sama seperti di atas, sengaja hanya opacity, tanpa transform, supaya lightbox foto yang
-     bersarang di dalam project/sertifikat tetap tampil layar penuh dengan benar. */
+     Sengaja hanya opacity, tanpa transform. */
   @keyframes reveal-in{
     from{opacity:0;}
     to{opacity:1;}
@@ -161,12 +165,16 @@
   }
   .media-placeholder svg{width:26px;height:26px;stroke:var(--steel);}
 
-  /* Lightbox foto: klik gambar untuk memperbesar di halaman yang sama, tanpa tab baru */
+  /* Lightbox foto: klik gambar untuk memperbesar di halaman yang sama, tanpa tab baru.
+     PENTING: kotak lightbox-overlay SEMUA diletakkan terkumpul di paling bawah halaman
+     (sebelum footer), TIDAK bersarang di dalam project/sertifikat. Ini sengaja, supaya
+     lightbox tidak ikut transparan saat animasi scroll dan tidak ketutupan site header. */
   .lightbox-link{display:block;cursor:zoom-in;}
   .lightbox-overlay{
-    display:none;position:fixed;inset:0;z-index:100;
+    display:none;position:fixed;inset:0;z-index:200;
     background:rgba(23,36,49,0.92);
     align-items:center;justify-content:center;padding:2rem;
+    opacity:1;
   }
   .lightbox-overlay:target{display:flex;}
   .lightbox-overlay-bg{position:absolute;inset:0;z-index:0;}
@@ -197,8 +205,6 @@
   /* Field label pattern (untuk Latar belakang, Tools & teknologi) */
   .field{margin-top:1.1rem;}
   .field-label{display:block;font-family:var(--font-mono);font-size:0.75rem;color:var(--steel);margin-bottom:0.35rem;}
-  /* Latar belakang: lebar penuh (tidak dibatasi 62ch seperti paragraf lain) supaya tidak
-     menyisakan ruang kosong di kanan pada kartu project yang lebar, dan rata kanan-kiri. */
   .field p{max-width:none;text-align:justify;}
 
   /* Projects */
@@ -214,14 +220,7 @@
   .project-period em{font-style:normal;color:var(--blueprint);}
   .project-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.5rem;}
   .project-gallery iframe{width:100%;aspect-ratio:16/9;height:auto;border:0;}
-  /* Semua foto di galeri project dipaksa ke ukuran/rasio yang sama (16:9, dipotong rapi
-     dengan object-fit:cover) supaya tidak berantakan meski file aslinya beda-beda ukuran. */
   .project-gallery .lightbox-link img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;}
-  .tag-list{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;}
-  .tag{
-    font-family:var(--font-mono);font-size:0.75rem;color:var(--blueprint);
-    border:1px solid var(--line);padding:0.2rem 0.55rem;margin:0 0.4rem 0.4rem 0;background:var(--paper);
-  }
   .project-links{margin-top:1.4rem;}
   .link-code{
     font-family:var(--font-mono);font-size:0.85rem;color:var(--blueprint);text-decoration:none;
@@ -230,6 +229,17 @@
   .link-code:hover{background:var(--blueprint);color:#fff;border-color:var(--blueprint);}
   .role-list{list-style:disc;padding-left:1.3rem;margin:0;max-width:62ch;}
   .role-list li{margin-bottom:0.4rem;}
+
+  /* Tag chips (dipakai di Tools & teknologi project, dan di bagian Keahlian).
+     Bentuk pil (rounded penuh), dengan ikon kecil di kiri tiap tag. */
+  .tag-list{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .tag{
+    font-family:var(--font-mono);font-size:0.75rem;color:var(--blueprint);
+    border:1px solid var(--line);padding:0.35rem 0.8rem 0.35rem 0.65rem;background:var(--paper);
+    border-radius:999px;
+    display:inline-flex;align-items:center;gap:0.4rem;
+  }
+  .tag i{font-size:0.8rem;}
 
   /* Timeline */
   .timeline{border-left:2px solid var(--line);margin-left:0.5rem;padding-left:2rem;display:flex;flex-direction:column;gap:2.25rem;}
@@ -243,22 +253,31 @@
   .timeline-org{font-size:0.9rem;color:var(--steel);margin-bottom:0.5rem;}
   .timeline-desc{margin:0;}
 
-  /* Subsection pattern (dipakai di Riwayat dan Keahlian) */
-  .subsection-title{font-size:1.1rem;font-weight:600;color:var(--blueprint-deep);margin-bottom:1.25rem;}
+  /* Subsection pattern (dipakai di Riwayat dan Keahlian), dengan ikon opsional di kiri judul */
+  .subsection-title{
+    font-size:1.1rem;font-weight:600;color:var(--blueprint-deep);margin-bottom:1.25rem;
+    display:flex;align-items:center;gap:0.6rem;
+  }
+  .subsection-title i{font-size:1rem;}
   .subsection + .subsection{margin-top:2.75rem;}
 
-  /* Skills */
-  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;}
-  .skill-group h3{font-size:1.02rem;font-weight:600;color:var(--ink);}
-  .skill-group ul{list-style:none;padding:0;margin:0;}
-  .skill-group li{padding:0.35rem 0;border-top:1px solid var(--line);font-size:0.95rem;}
-  .skill-group li:first-child{border-top:none;}
+  /* Skills: tiap kategori jadi kartu tersendiri dengan sudut rounded */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+  .skill-group{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.5rem;
+    transition:box-shadow .2s ease;
+  }
+  .skill-group:hover{box-shadow:0 10px 24px rgba(23,36,49,0.08);}
+  .skill-group h3{
+    font-size:1.02rem;font-weight:600;color:var(--ink);margin-bottom:1rem;
+    display:flex;align-items:center;gap:0.6rem;
+  }
+  .skill-group h3 i{color:var(--blueprint);font-size:1.05rem;}
 
   /* Certificates */
   .certificates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
   .certificate-card{background:var(--panel);border:1px solid var(--line);transition:box-shadow .2s ease;}
   .certificate-card:hover{box-shadow:0 10px 24px rgba(23,36,49,0.1);}
-  /* Semua foto sertifikat dipaksa ke rasio yang sama (4:3) supaya seragam */
   .certificate-card .lightbox-link img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
   .certificate-body{padding:1rem 1.1rem 1.2rem;}
   .certificate-title{font-size:0.98rem;font-weight:600;margin:0 0 0.25rem;max-width:none;}
@@ -402,16 +421,13 @@
         <article class="project reveal">
           <!-- GANTI: ganti kotak-kotak di bawah ini dengan foto atau video project ini.
                Untuk foto (bisa diklik untuk diperbesar, tanpa tab baru), pakai pola lightbox ini,
-               ganti ID-UNIK dengan id yang berbeda untuk tiap foto di SELURUH halaman (misal: foto-1, foto-2, dst).
-               PENTING: href harus diawali tanda pagar (#ID-UNIK), kalau lupa tanda pagar, browser
-               akan mencoba buka halaman lain dan muncul error 404:
+               ganti ID-UNIK dengan id yang berbeda untuk tiap foto di SELURUH halaman:
                <a href="#ID-UNIK" class="lightbox-link"><img src="assets/nama-file.jpg" alt="Deskripsi foto"></a>
-               <div id="ID-UNIK" class="lightbox-overlay">
-                 <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-                 <img src="assets/nama-file.jpg" alt="Deskripsi foto">
-                 <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-               </div>
-               (div id="ID-UNIK" ini taruh tepat setelah kotak medianya, masih di dalam project-gallery tidak masalah)
+               PENTING: href harus diawali tanda pagar (#ID-UNIK), atau muncul error 404.
+               Kotak overlay-nya (div class="lightbox-overlay") JANGAN ditaruh di sini.
+               Taruh di bagian "SEMUA KOTAK LIGHTBOX" paling bawah halaman (dekat footer),
+               salin polanya di sana. Ini sengaja, supaya lightbox tidak ikut transparan saat
+               animasi scroll dan tidak ketutupan menu navigasi.
                Untuk video YouTube: <iframe src="https://www.youtube-nocookie.com/embed/ID_VIDEO" title="Judul video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                Jumlahnya tidak harus 3. Kalau foto/video Anda lebih banyak, tinggal copy-paste
                div class="media-placeholder" tambahan di dalam project-gallery ini, otomatis akan
@@ -420,29 +436,9 @@
             <iframe src="https://www.youtube-nocookie.com/embed/LqgnrEhI7wM" title="Demo Path Planning 4-Wheeled Omnidirectional Cellular Conveyor Berbasis Raspberry Pi" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <iframe src="https://www.youtube-nocookie.com/embed/fiGFTaPPUnU" title="Hasil Path Tracking Box pada sistem 4-Wheeled Omnidirectional Conveyor" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <a href="#foto-omni1" class="lightbox-link"><img src="assets/Desain 3D_Omniconveyor.jpg" alt="Desain 3D sistem 4-wheeled omnidirectional conveyor"></a>
-            <div id="foto-omni1" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Desain 3D_Omniconveyor.jpg" alt="Desain 3D sistem 4-wheeled omnidirectional conveyor">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-omni2" class="lightbox-link"><img src="assets/Diagram Blok Sistem_Omniconveyor.jpg" alt="Diagram blok sistem 4-wheeled omnidirectional conveyor"></a>
-            <div id="foto-omni2" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Diagram Blok Sistem_Omniconveyor.jpg" alt="Diagram blok sistem 4-wheeled omnidirectional conveyor">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-omni3" class="lightbox-link"><img src="assets/Panel Wiring_Omniconveyor.jpg" alt="Hasil panel wiring"></a>
-            <div id="foto-omni3" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Panel Wiring_Omniconveyor.jpg" alt="Hasil panel wiring">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-omni4" class="lightbox-link"><img src="assets/Realisasi Hardware_Omniconveyor.jpg" alt="Hasil realisasi hardware sistem"></a>
-            <div id="foto-omni4" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Realisasi Hardware_Omniconveyor.jpg" alt="Hasil realisasi hardware sistem">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
           </div>
           <div class="project-body">
             <h3>[Skripsi] Pengembangan Algoritma Path Planning Pada Sistem 4-Wheeled Omnidirectional Cellular Conveyor Berbasis Raspberry Pi</h3>
@@ -465,8 +461,16 @@
             <div class="field">
               <span class="field-label">Tools &amp; teknologi</span>
               <ul class="tag-list">
-                <li class="tag">Raspberry Pi 5</li><li class="tag">ESP32</li><li class="tag">I2C</li><li class="tag">Algoritma Dijkstra</li><li class="tag">OpenCV</li><li class="tag">Modbus RS-485</li>
-                <li class="tag">Sensor Encoder</li><li class="tag">Sensor Proximity</li><li class="tag">Motor DC</li><li class="tag">Sistem Conveyor</li>
+                <li class="tag"><i class="fa-brands fa-raspberry-pi"></i>Raspberry Pi 5</li>
+                <li class="tag"><i class="fa-solid fa-microchip"></i>ESP32</li>
+                <li class="tag"><i class="fa-solid fa-network-wired"></i>I2C</li>
+                <li class="tag"><i class="fa-solid fa-route"></i>Algoritma Dijkstra</li>
+                <li class="tag"><i class="fa-solid fa-eye"></i>OpenCV</li>
+                <li class="tag"><i class="fa-solid fa-network-wired"></i>Modbus RS-485</li>
+                <li class="tag"><i class="fa-solid fa-gauge"></i>Sensor Encoder</li>
+                <li class="tag"><i class="fa-solid fa-ruler-combined"></i>Sensor Proximity</li>
+                <li class="tag"><i class="fa-solid fa-fan"></i>Motor DC</li>
+                <li class="tag"><i class="fa-solid fa-boxes-stacked"></i>Sistem Conveyor</li>
               </ul>
             </div>
             <!-- GANTI: ganti "#" dengan link repository code Anda -->
@@ -480,35 +484,10 @@
           <div class="project-gallery">
             <iframe src="https://www.youtube-nocookie.com/embed/dBTz2ocGle4" title="Demo Alat Soil Nutrients Monitoring" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <a href="#foto-soil1" class="lightbox-link"><img src="assets/Alur Kerja_Soil Nutrient.jpg" alt="Alur kerja alat soil nutrients monitoring"></a>
-            <div id="foto-soil1" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Alur Kerja_Soil Nutrient.jpg" alt="Alur kerja alat soil nutrients monitoring">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-soil2" class="lightbox-link"><img src="assets/3D Desain_ Soil Nutrients.jpg" alt="Gambar 3D desain soil nutrients monitoring"></a>
-            <div id="foto-soil2" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/3D Desain_ Soil Nutrients.jpg" alt="Gambar 3D desain soil nutrients monitoring">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-soil3" class="lightbox-link"><img src="assets/PCB_Soil Nutrients.jpg" alt="PCB alat soil nutrients monitoring"></a>
-            <div id="foto-soil3" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/PCB_Soil Nutrients.jpg" alt="PCB alat soil nutrients monitoring">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-soil4" class="lightbox-link"><img src="assets/Proses Perakitan_Soil Nutrients.jpg" alt="Proses perakitan alat soil nutrients monitoring"></a>
-            <div id="foto-soil4" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Proses Perakitan_Soil Nutrients.jpg" alt="Proses perakitan alat soil nutrients monitoring">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-soil5" class="lightbox-link"><img src="assets/Realisasi Hardware_Soil Nutrients.jpg" alt="Hasil akhir alat soil nutrients monitoring"></a>
-            <div id="foto-soil5" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Realisasi Hardware_Soil Nutrients.jpg" alt="Hasil akhir alat soil nutrients monitoring">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
           </div>
           <div class="project-body">
             <h3>Soil Nutrients Monitoring</h3>
@@ -529,8 +508,14 @@
             <div class="field">
               <span class="field-label">Tools &amp; teknologi</span>
               <ul class="tag-list">
-                <li class="tag">ESP32</li><li class="tag">Sensor Suhu</li><li class="tag">Sensor pH</li><li class="tag">Sensor NPK</li><li class="tag">Sensor Kelembapan Tanah</li><li class="tag">Internet of Things (IoT)</li>
-                <li class="tag">Bluetooth Low Energy (BLE)</li><li class="tag">Smart Farming</li>
+                <li class="tag"><i class="fa-solid fa-microchip"></i>ESP32</li>
+                <li class="tag"><i class="fa-solid fa-temperature-half"></i>Sensor Suhu</li>
+                <li class="tag"><i class="fa-solid fa-flask"></i>Sensor pH</li>
+                <li class="tag"><i class="fa-solid fa-seedling"></i>Sensor NPK</li>
+                <li class="tag"><i class="fa-solid fa-droplet"></i>Sensor Kelembapan Tanah</li>
+                <li class="tag"><i class="fa-solid fa-wifi"></i>Internet of Things (IoT)</li>
+                <li class="tag"><i class="fa-brands fa-bluetooth-b"></i>Bluetooth Low Energy (BLE)</li>
+                <li class="tag"><i class="fa-solid fa-seedling"></i>Smart Farming</li>
               </ul>
             </div>
             <div class="project-links">
@@ -543,17 +528,7 @@
           <div class="project-gallery">
             <iframe src="https://www.youtube-nocookie.com/embed/3kndaaVb0OY" title="Automatic Nutrition Mixing Hidroponics" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             <a href="#foto-nutrimixing1" class="lightbox-link"><img src="assets/Diagram Blok_Nutrimixing.jpg" alt="Diagram blok alat Automatic Nutrition Mixing"></a>
-            <div id="foto-nutrimixing1" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Diagram Blok_Nutrimixing.jpg" alt="Diagram blok alat Automatic Nutrition Mixing">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-nutrimixing2" class="lightbox-link"><img src="assets/Realisasi Hardware_Nutrimixing.jpg" alt="Hasil akhir alat Automatic Nutrition Mixing"></a>
-            <div id="foto-nutrimixing2" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Realisasi Hardware_Nutrimixing.jpg" alt="Hasil akhir alat Automatic Nutrition Mixing">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
           </div>
           <div class="project-body">
             <h3>Automatic Nutrition Mixing for Hydroponics</h3>
@@ -574,8 +549,12 @@
             <div class="field">
               <span class="field-label">Tools &amp; teknologi</span>
               <ul class="tag-list">
-                <li class="tag">Arduino Mega + ESP8266</li><li class="tag">Sensor TDS Meter</li><li class="tag">Sensor Water Level</li><li class="tag">Sensor Water Flow</li>
-                <li class="tag">Peristaltic Pumps</li><li class="tag">Blynk IoT</li>
+                <li class="tag"><i class="fa-solid fa-microchip"></i>Arduino Mega + ESP8266</li>
+                <li class="tag"><i class="fa-solid fa-vial"></i>Sensor TDS Meter</li>
+                <li class="tag"><i class="fa-solid fa-water"></i>Sensor Water Level</li>
+                <li class="tag"><i class="fa-solid fa-faucet-drip"></i>Sensor Water Flow</li>
+                <li class="tag"><i class="fa-solid fa-droplet"></i>Peristaltic Pumps</li>
+                <li class="tag"><i class="fa-solid fa-mobile-screen"></i>Blynk IoT</li>
               </ul>
             </div>
           </div>
@@ -585,23 +564,8 @@
           <div class="project-gallery">
             <iframe src="https://www.youtube-nocookie.com/embed/aykD4BpQjuA" title="Proses R&D Robot Monitoring Greenhouse Berbasis IoT" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             <a href="#foto-robot1" class="lightbox-link"><img src="assets/3D Desain_ Robot.jpg" alt="3D desain bagian luar robot"></a>
-            <div id="foto-robot1" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/3D Desain_ Robot.jpg" alt="3D desain bagian luar robot">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-robot2" class="lightbox-link"><img src="assets/3D Desain Dalam_ Robot.jpg" alt="3D desain bagian dalam robot"></a>
-            <div id="foto-robot2" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/3D Desain Dalam_ Robot.jpg" alt="3D desain bagian dalam robot">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
             <a href="#foto-robot3" class="lightbox-link"><img src="assets/Realisasi Hardware_ Robot.jpg" alt="Hasil akhir robot"></a>
-            <div id="foto-robot3" class="lightbox-overlay">
-              <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-              <img src="assets/Realisasi Hardware_ Robot.jpg" alt="Hasil akhir robot">
-              <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-            </div>
           </div>
           <div class="project-body">
             <h3>Robot Monitoring Greenhouse Berbasis IoT</h3>
@@ -623,7 +587,10 @@
             <div class="field">
               <span class="field-label">Tools &amp; teknologi</span>
               <ul class="tag-list">
-                <li class="tag">Autodesk Inventor</li><li class="tag">Firebase</li><li class="tag">Raspberry Pi</li><li class="tag">Arduino</li>
+                <li class="tag"><i class="fa-solid fa-cube"></i>Autodesk Inventor</li>
+                <li class="tag"><i class="fa-solid fa-database"></i>Firebase</li>
+                <li class="tag"><i class="fa-brands fa-raspberry-pi"></i>Raspberry Pi</li>
+                <li class="tag"><i class="fa-solid fa-microchip"></i>Arduino</li>
               </ul>
             </div>
           </div>
@@ -638,58 +605,58 @@
       <h2 class="section-title reveal">Keahlian</h2>
 
       <div class="subsection">
-        <h3 class="subsection-title">Technical Skills</h3>
+        <h3 class="subsection-title"><i class="fa-solid fa-screwdriver-wrench"></i>Technical Skills</h3>
         <div class="skills-grid">
-          <div class="skill-group">
-            <h3>Desain 2D/3D</h3>
-            <ul>
-              <li>Autodesk Inventor</li>
-              <li>AutoCAD</li>
+          <div class="skill-group reveal">
+            <h3><i class="fa-solid fa-cube"></i>Desain 2D/3D</h3>
+            <ul class="tag-list">
+              <li class="tag"><i class="fa-solid fa-cube"></i>Autodesk Inventor</li>
+              <li class="tag"><i class="fa-solid fa-compass-drafting"></i>AutoCAD</li>
             </ul>
           </div>
-          <div class="skill-group">
-            <h3>PCB Desain</h3>
-            <ul>
-              <li>Eagle</li>
-              <li>Kicad</li>
-              <li>Altium Designer</li>
+          <div class="skill-group reveal">
+            <h3><i class="fa-solid fa-microchip"></i>PCB Desain</h3>
+            <ul class="tag-list">
+              <li class="tag"><i class="fa-solid fa-microchip"></i>Eagle</li>
+              <li class="tag"><i class="fa-solid fa-microchip"></i>Kicad</li>
+              <li class="tag"><i class="fa-solid fa-microchip"></i>Altium Designer</li>
             </ul>
           </div>
-          <div class="skill-group">
-            <h3>PLC&amp;HMI</h3>
-            <ul>
-              <li>Omron</li>
-              <li>Schneider</li>
-              <li>Haiwell</li>
+          <div class="skill-group reveal">
+            <h3><i class="fa-solid fa-industry"></i>PLC&amp;HMI</h3>
+            <ul class="tag-list">
+              <li class="tag"><i class="fa-solid fa-industry"></i>Omron</li>
+              <li class="tag"><i class="fa-solid fa-industry"></i>Schneider</li>
+              <li class="tag"><i class="fa-solid fa-industry"></i>Haiwell</li>
             </ul>
           </div>
-          <div class="skill-group">
-            <h3>Embedded &amp; Firmware Development</h3>
-            <ul>
-              <li>Arduino IDE</li>
-              <li>PlatformIO</li>
-              <li>STM32CubeIDE</li>
+          <div class="skill-group reveal">
+            <h3><i class="fa-solid fa-code"></i>Embedded &amp; Firmware Development</h3>
+            <ul class="tag-list">
+              <li class="tag"><i class="fa-solid fa-code"></i>Arduino IDE</li>
+              <li class="tag"><i class="fa-solid fa-code"></i>PlatformIO</li>
+              <li class="tag"><i class="fa-solid fa-code"></i>STM32CubeIDE</li>
             </ul>
           </div>
-          <div class="skill-group">
-            <h3>Pemrograman</h3>
-            <ul>
-              <li>C&#47;C++</li>
-              <li>Python</li>
-              <li>Ladder Diagram (LD)</li>
+          <div class="skill-group reveal">
+            <h3><i class="fa-solid fa-terminal"></i>Pemrograman</h3>
+            <ul class="tag-list">
+              <li class="tag"><i class="fa-solid fa-code"></i>C&#47;C++</li>
+              <li class="tag"><i class="fa-brands fa-python"></i>Python</li>
+              <li class="tag"><i class="fa-solid fa-diagram-project"></i>Ladder Diagram (LD)</li>
             </ul>
           </div>
         </div>
       </div>
 
       <div class="subsection">
-        <h3 class="subsection-title">Soft Skills</h3>
+        <h3 class="subsection-title"><i class="fa-solid fa-comments"></i>Soft Skills</h3>
         <!-- GANTI: daftar berikut hanya contoh, sesuaikan dengan diri Anda sendiri -->
         <ul class="tag-list">
-          <li class="tag">Problem Solving &amp; Analytical Thinking</li>
-          <li class="tag">Cross-functional Collaboration</li>
-          <li class="tag">Project Planning &amp; Management</li>
-          <li class="tag">Leadership &amp; Team Coordination</li>
+          <li class="tag"><i class="fa-solid fa-lightbulb"></i>Problem Solving &amp; Analytical Thinking</li>
+          <li class="tag"><i class="fa-solid fa-handshake"></i>Cross-functional Collaboration</li>
+          <li class="tag"><i class="fa-solid fa-list-check"></i>Project Planning &amp; Management</li>
+          <li class="tag"><i class="fa-solid fa-users"></i>Leadership &amp; Team Coordination</li>
         </ul>
       </div>
 
@@ -699,18 +666,12 @@
   <section id="sertifikat" class="section">
     <div class="container">
       <h2 class="section-title reveal">Sertifikasi dan Pencapaian</h2>
-      <!-- GANTI: tambahkan sertifikat Anda (sertifikat lomba maupun sertifikasi kompetensi).
-           Salin (copy-paste) satu blok class="certificate-card" untuk tiap sertifikat baru.
-           PENTING: href harus diawali tanda pagar (#ID-UNIK), dan ID-nya harus berbeda dari
-           semua id lain di halaman (termasuk id foto di bagian Project), atau lightbox salah buka. -->
+      <!-- GANTI: tambahkan sertifikat Anda. Salin satu blok class="certificate-card" untuk tiap
+           sertifikat baru. PENTING: href harus diawali tanda pagar (#ID-UNIK), dan kotak overlay-nya
+           ditaruh di bagian "SEMUA KOTAK LIGHTBOX" paling bawah halaman, bukan di sini. -->
       <div class="certificates-grid">
         <div class="certificate-card reveal">
           <a href="#foto-sertifikat1" class="lightbox-link"><img src="assets/sertifikat kompetensi mekatronika.jpg" alt="Sertifikat Kompetensi Engineer Mekatronika"></a>
-          <div id="foto-sertifikat1" class="lightbox-overlay">
-            <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-            <img src="assets/sertifikat kompetensi mekatronika.jpg" alt="Sertifikat Kompetensi Engineer Mekatronika">
-            <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-          </div>
           <div class="certificate-body">
             <p class="certificate-title">Mechatronics Engineer Certification</p>
             <p class="certificate-meta">Badan Nasional Sertifikasi Profesi (BNSP), 2026-2029</p>
@@ -718,11 +679,6 @@
         </div>
         <div class="certificate-card reveal">
           <a href="#foto-sertifikat2" class="lightbox-link"><img src="assets/Sertifikat pkm.jpg" alt="Sertifikat PKM-KC 2024"></a>
-          <div id="foto-sertifikat2" class="lightbox-overlay">
-            <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-            <img src="assets/Sertifikat pkm.jpg" alt="Sertifikat PKM-KC 2024">
-            <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-          </div>
           <div class="certificate-body">
             <p class="certificate-title">Sertifikat PKM-KC 2024</p>
             <p class="certificate-meta">Direktorat Jendral Pendidikan Vokasi, 2024</p>
@@ -730,11 +686,6 @@
         </div>
         <div class="certificate-card reveal">
           <a href="#foto-sertifikat3" class="lightbox-link"><img src="assets/sertifikat aitec.jpg" alt="Sertifikat AITeC5"></a>
-          <div id="foto-sertifikat3" class="lightbox-overlay">
-            <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
-            <img src="assets/sertifikat aitec.jpg" alt="Sertifikat AITeC5">
-            <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
-          </div>
           <div class="certificate-body">
             <p class="certificate-title">Sertifikat AITeC 5 (Juara 2 Efektif)</p>
             <p class="certificate-meta">Direktorat Jendral Pendidikan Vokasi, 2023</p>
@@ -760,6 +711,102 @@
   </section>
 
 </main>
+
+<!-- ======================================================================
+     SEMUA KOTAK LIGHTBOX ADA DI SINI (JANGAN dipindah ke dalam project/
+     sertifikat di atas). Tiap kotak id="..." di sini harus sama persis
+     dengan href="#..." pada link foto yang bersangkutan di atas.
+     ====================================================================== -->
+
+<div id="foto-omni1" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Desain 3D_Omniconveyor.jpg" alt="Desain 3D sistem 4-wheeled omnidirectional conveyor">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-omni2" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Diagram Blok Sistem_Omniconveyor.jpg" alt="Diagram blok sistem 4-wheeled omnidirectional conveyor">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-omni3" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Panel Wiring_Omniconveyor.jpg" alt="Hasil panel wiring">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-omni4" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Realisasi Hardware_Omniconveyor.jpg" alt="Hasil realisasi hardware sistem">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+
+<div id="foto-soil1" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Alur Kerja_Soil Nutrient.jpg" alt="Alur kerja alat soil nutrients monitoring">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-soil2" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/3D Desain_ Soil Nutrients.jpg" alt="Gambar 3D desain soil nutrients monitoring">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-soil3" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/PCB_Soil Nutrients.jpg" alt="PCB alat soil nutrients monitoring">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-soil4" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Proses Perakitan_Soil Nutrients.jpg" alt="Proses perakitan alat soil nutrients monitoring">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-soil5" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Realisasi Hardware_Soil Nutrients.jpg" alt="Hasil akhir alat soil nutrients monitoring">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+
+<div id="foto-nutrimixing1" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Diagram Blok_Nutrimixing.jpg" alt="Diagram blok alat Automatic Nutrition Mixing">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-nutrimixing2" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Realisasi Hardware_Nutrimixing.jpg" alt="Hasil akhir alat Automatic Nutrition Mixing">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+
+<div id="foto-robot1" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/3D Desain_ Robot.jpg" alt="3D desain bagian luar robot">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-robot2" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/3D Desain Dalam_ Robot.jpg" alt="3D desain bagian dalam robot">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-robot3" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Realisasi Hardware_ Robot.jpg" alt="Hasil akhir robot">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+
+<div id="foto-sertifikat1" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/sertifikat kompetensi mekatronika.jpg" alt="Sertifikat Kompetensi Engineer Mekatronika">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-sertifikat2" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/Sertifikat pkm.jpg" alt="Sertifikat PKM-KC 2024">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
+<div id="foto-sertifikat3" class="lightbox-overlay">
+  <a href="#_" class="lightbox-overlay-bg" aria-label="Tutup"></a>
+  <img src="assets/sertifikat aitec.jpg" alt="Sertifikat AITeC5">
+  <a href="#_" class="lightbox-close" aria-label="Tutup">&times;</a>
+</div>
 
 <footer>
   <div class="container">
